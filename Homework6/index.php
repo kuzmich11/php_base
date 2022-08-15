@@ -1,9 +1,9 @@
 <?php
-session_start();
+//session_start();
 
 $controller = $_GET['controller'] ?? 'home';
-$routes = require 'controller/routes.php';
+$routes = require 'routes.php';
 
-require_once $routes[$controller];
+require_once $routes[$controller] ?? 'view/404.php';
 
 
