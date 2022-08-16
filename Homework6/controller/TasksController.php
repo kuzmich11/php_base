@@ -31,4 +31,5 @@ if (isset($_GET['action']) && $_GET['action'] === 'done') {
     die();
 }
 
-require_once "view/tasks.php";
+$tasks = $taskProvider->getUndoneList();
+include "view/tasks.php";

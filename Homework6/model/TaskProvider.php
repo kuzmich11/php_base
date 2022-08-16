@@ -5,7 +5,6 @@ class TaskProvider {
 
     public function __construct()
     {
-        //при создании хранилища читаем задачи из сессии
         $this->tasks = $_SESSION['tasks'] ?? [];
     }
 
@@ -19,7 +18,7 @@ class TaskProvider {
     {
         $tasks = [];
         foreach ($this->tasks as $key => $task) {
-            if (!$task->isDone()) {
+            if (!$task->getIsDone()) {
                 $tasks[$key] = $task;
             }
         }

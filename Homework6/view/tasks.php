@@ -21,7 +21,7 @@
 </form>
 </div>
 <h3>Список активных задач</h3>
-<?php foreach ($_SESSION['tasks'] as $key => $task): ?>
+<?php foreach ($tasks as $key => $task): ?>
     <div>
         <?=$task->getDescription()?>
         <a href="/?controller=tasks&action=done&key=<?=$key?>">[Выполнено]</a><br><br>
