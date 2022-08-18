@@ -1,17 +1,36 @@
 <?php
 
-class UserProvider {
-    private array $accounts = [
-        'admin' => '123',
-    ];
+class UserProvider
+{
+    private PDO $pdo;
 
-    public function getByUsernameAndPassword(string $username, string $pass): ?User
+    public function __construct(PDO $pdo)
     {
-        $expectedPassword = $this->accounts[$username] ?? null;
-        if ($expectedPassword === $pass) {
-            return new User($username);
-        }
+        $this->pdo = $pdo;
+    }
 
-        return null;
+    public function registerUser(User $user, string $plainPassword): bool
+    {
+        $statement = $this->pdo->prepare(
+            'INSERT INTO users (name, username, password) VALUES (:name, :username, :password)'
+        );
+
+        return $statement->execute([
+            'name' => $user->getName(),
+            'username' => $user->getUsername(),
+            'password' => md5($plainPassword)
+        ]);
+    }
+
+    public function getByUsernameAndPassword(string $username, string $password): ?User
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT id, name, username FROM users WHERE username = :username AND password = :password LIMIT 1'
+        );
+        $statement->execute([
+            'username' => $username,
+            'password' => md5($password)
+        ]);
+        return $statement->fetchObject(User::class, [$username]) ?: null;
     }
 }

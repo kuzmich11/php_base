@@ -21,10 +21,13 @@
 </form>
 </div>
 <h3>Список активных задач</h3>
-<?php foreach ($tasks as $key => $task): ?>
+<!--    <div>-->
+<!--        --><?php //print_r($tasks) ?>
+<!--    </div>-->
+<?php foreach ($tasks as $task): ?>
     <div>
-        <?=$task->getDescription()?>
-        <a href="/?controller=tasks&action=done&key=<?=$key?>">[Выполнено]</a><br><br>
+        <?=$task['description']?>
+        <a href="/?controller=tasks&action=done&key=<?=$task['id']?>">[Выполнено]</a><br><br>
     </div>
 <?php endforeach; ?>
 </body>
