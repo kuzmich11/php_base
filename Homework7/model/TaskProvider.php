@@ -1,33 +1,41 @@
 <?php
 
-class TaskProvider {
-    private array $tasks;
+class TaskProvider
+{
+    private PDO $pdo;
 
-    public function __construct()
+    public function __construct(PDO $pdo)
     {
-        $this->tasks = $_SESSION['tasks'] ?? [];
+        $this->pdo=$pdo;
     }
 
-    public function addTask(Task $task): void
+    public function addTask(Task $task): bool
     {
-        $_SESSION['tasks'][] = $task;
-        $this->tasks[] = $task;
+        $statement = $this->pdo->prepare(
+            'INSERT INTO tasks (description, isDone) VALUES (:description, :isDone)'
+        );
+
+        return $statement->execute([
+            'description' => $task->getDescription(),
+            'isDone' => $task->getIsDone()
+        ]);
     }
 
     public function getUndoneList(): array
     {
-        $tasks = [];
-        foreach ($this->tasks as $key => $task) {
-            if (!$task->getIsDone()) {
-                $tasks[$key] = $task;
-            }
-        }
-        return $tasks;
+        $statement = $this->pdo->query(
+            'SELECT id, description FROM tasks'
+        );
+        return $statement->fetchAll();
     }
 
     public function deleteTask(int $key): void
     {
-        unset($_SESSION['tasks'][$key]);
-        unset($this->tasks[$key]);
+        $statement = $this->pdo->prepare(
+            'DELETE FROM tasks WHERE id = :id'
+        );
+        $statement->execute([
+            'id' => $key
+        ]);
     }
 }

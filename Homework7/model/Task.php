@@ -7,9 +7,9 @@ class Task {
     /**
      * @param string $description
      */
-    public function __construct(string $description)
+    public function __construct(string $task)
     {
-        $this->description = $description;
+        $this->description = $task;
     }
 
     /**
@@ -23,9 +23,10 @@ class Task {
     /**
      * @param mixed $description
      */
-    public function setDescription($description): void
+    public function setDescription($description): self
     {
         $this->description = $description;
+        return $this;
     }
 
     /**
@@ -36,9 +37,10 @@ class Task {
         return $this->isDone;
     }
 
-    function markAsDone()
+    function setIsDone(): self
     {
         $this->isDone = true;
+        return $this;
     }
 
 }
